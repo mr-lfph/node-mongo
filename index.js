@@ -73,7 +73,8 @@ app.post('/addProduct', (req, res) => {
     const client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
         const collection = client.db("onlineStore").collection("products");
-        collection.insertOne(product, (err, result) => {
+        // collection.insertOne(product, (err, result) => {
+        collection.insert(product, (err, result) => {
 
             if (err) {
                 console.log(err);
@@ -88,7 +89,7 @@ app.post('/addProduct', (req, res) => {
 
 
 })
-const port=process.env.PORT || 3000;
-app.listen(port, () => console.log('Listening to port 3000 nodemon'));
+const port=process.env.PORT || 4200;
+app.listen(port, () => console.log('Listening to port 4200 nodemon'));
 
 

@@ -1,7 +1,7 @@
 {
   "name": "mongo",
   "version": "1.0.0",
-  "description": "",
+  "description": "��#\u0000 \u0000n\u0000o\u0000d\u0000e\u0000-\u0000m\u0000o\u0000n\u0000g\u0000o\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index",
@@ -15,5 +15,14 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongodb": "^3.5.5"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mr-lfph/node-mongo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mr-lfph/node-mongo/issues"
+  },
+  "homepage": "https://github.com/mr-lfph/node-mongo#readme"
 }
