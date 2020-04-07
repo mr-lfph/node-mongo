@@ -60,13 +60,46 @@ app.get('/fruits/banana', (req, res) => {
     res.send({ fruit: 'Banana', quantity: 100, price: 1000 })
 })
 
-app.get('/users/:id', (req, res) => {
-    const Id = req.params.id;
+app.get('/product/:key', (req, res) => {
+    const key = req.params.key;
     //console.log(req.query.sort);
+    const client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        const collection = client.db("onlineStore").collection("products");
+        //find({name:'Mobile'})
+        collection.find({key}).toArray((err, documents) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send({message:err});
+            }
+            else {
+                res.send(documents[0]);// [0] means get only one product 
+            }
+        });
+        client.close();
+    })
 
-    const name = users[Id];
-    res.send({ Id, name });
-})
+    // const name = users[Id];
+    // res.send({ Id, name });
+});
+app.post('/getProductByKey', (req, res) => {
+    const key = req.params.key;
+    const productKeys=req.body;
+    const client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        const collection = client.db("onlineStore").collection("products");
+        collection.find({key:{$in:productKeys}}).toArray((err, documents) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send({message:err});
+            }
+            else {
+                res.send(documents);
+            }
+        });
+        client.close();
+    })
+});
 
 app.post('/addProduct', (req, res) => {
     const product = req.body;
@@ -88,6 +121,28 @@ app.post('/addProduct', (req, res) => {
     });
 
 
+})
+
+app.post('/placeOrder', (req, res) => {
+    const orderDetails = req.body;
+    orderDetails.orderTime=new Date();
+   console.log(orderDetails);
+    const client = new MongoClient(uri, { useNewUrlParser: true });
+    client.connect(err => {
+        const collection = client.db("onlineStore").collection("orders");//for first time mongo create a table orders
+        // collection.insertOne(product, (err, result) => {
+        collection.insertOne(orderDetails, (err, result) => {
+
+            if (err) {
+                console.log(err);
+                res.status(500).send({message:err});
+            }
+            else {
+                res.send(result.ops[0]);
+            }
+        });
+        client.close();
+    });
 })
 const port=process.env.PORT || 4200;
 app.listen(port, () => console.log('Listening to port 4200 nodemon'));
